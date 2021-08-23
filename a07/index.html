@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <title>Spooky 2048</title>
+
+        
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+        <link rel="stylesheet" type="text/css" href="style.css">
+
+    </head>
+
+    <body>
+        <div class = "has-text-centered has-text-weight-semibold" id = "header">
+            <h1 class = "title has-text-black text-centered">~2048~</h1>
+            <p class="description has-text is-italic" id = "descript">Find the 2048 Tile to unmask the monsters</p>
+           
+            <div class= "top-div is-centered">
+                <h2 id ="score" class = "has-text is-italic has-text-weight-semibold"></h2>
+                <button id="reset-button" class ="button is-black">Reset</button>
+            </div>
+
+            <div id="winLoseDiv"class = "top-div hidden" >
+                <h2 id ="winText" class ="has-text-success hidden">I would have gotten away with it too!</h2>
+                <h2 id="loseText" class ="has-text-danger has-text-weight-semibold hidden">You lose muahaha >:(</h2>
+
+            </div>
+        </div>
+            <div id="board" ></div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script   src="controller.js" type="module"></script>
+    </body>
+</html>

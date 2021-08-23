@@ -1,7 +1,7 @@
 /**
  * Course: COMP 426
  * Assignment: a04
- * Author: <type your name here>
+ * Author: Michael Beebe
  *
  * This script uses jQuery to build an HTML page with content taken from the
  * data defined in data.js.
@@ -18,6 +18,23 @@ export const renderHeroCard = function(hero) {
     // TODO: Generate HTML elements to represent the hero
     // TODO: Return these elements as a string, HTMLElement, or jQuery object
     // Example: return `<div>${hero.name}</div>`;
+    return (`
+    <div class="section is-parent is-vertical">
+        <article class="container is-child" style="color:${hero.backgroundColor}">
+            <figure class="image is-square">
+                <img class="is-square" alt="Hero Img" src="${hero.img}">
+            </figure>
+            <p class="title has-text-centered is-family-monospace"><span style="color:${hero.color}">${hero.name}</span></p>
+            <p class="subtitle is-bold has-text-centered is-family-monospace"><span>${hero.subtitle}</span></p>
+            <p class="is-family-monospace"><strong>Alter ego:</strong> ${hero.first} ${hero.last}</p>
+            <p class="is-family-monospace"><strong>First appearance:</strong> ${hero.firstSeen}</p>
+            <p class="is-family-monospace">${hero.description}</p>
+
+            <button class="button is-dark is-right has-text-grey-lighter">Edit</button>
+        </article>
+    </div>
+    `);
+
 };
 
 
@@ -32,6 +49,49 @@ export const renderHeroEditForm = function(hero) {
     // TODO: Generate HTML elements to represent the hero edit form
     // TODO: Return these elements as a string, HTMLElement, or jQuery object
     // Example: return `<form>${hero.name}</form>`;
+
+    return (`
+    <form class="section has-background-warning-light">
+        <div class="field">
+            <label class="label">Hero Name</label>
+            <div class="control">
+                <input class="input is-italic" type="text" value=${hero.name}>
+            </div>
+        </div>
+        <div class="field">
+            <label class="label">First Name</label>
+            <div class="control">
+                <input class="input is-italic" type="text" value=${hero.first}>
+            </div>
+        </div>
+        <div class="field">
+            <label class="label">Last Name</label>
+            <div class="control">
+                <input class="input is-italic" type="text" value=${hero.last}>
+            </div>
+        </div>
+        <div class="field">
+            <label class="label">Subtitle</label>
+            <div class="control">
+                <input class="input is-italic" type="text" value=${hero.subtitle}>
+            </div>
+        </div>
+        <div class="field">
+            <label class="label">Hero Description</label>
+            <div class="control">
+                <textarea class="textarea is-italic">${hero.description}</textarea>
+            </div>
+        </div>
+        <div class="field">
+            <label class="label">Hero First Seen</label>
+            <div class="control">
+                <input class="input is-italic" type="date" value="${hero.firstSeen.getFullYear()}-${("0" + hero.firstSeen.getMonth())}-${("0" + hero.firstSeen.getDate())}">
+            </div>
+        </div>
+        <button class="button is-danger is-right">Cancel</button>
+        <button class="button is-dark is-right" type="submit">Save</button>
+    </form>
+    `);
 };
 
 
@@ -48,13 +108,16 @@ export const loadHeroesIntoDOM = function(heroes) {
     // TODO: Generate the heroes using renderHeroCard()
 
     // TODO: Append the hero cards to the $root element
-
+    for(let i = 0; i < heroes.length; i++) {
+        $root.append(renderHeroCard(heroes[i]));
+    }
     // Pick a hero from the list at random
     const randomHero = heroes[Math.floor(Math.random() * heroes.length)];
 
     // TODO: Generate the hero edit form using renderHeroEditForm()
 
     // TODO: Append the hero edit form to the $root element
+    $root.append(renderHeroEditForm(randomHero));
 };
 
 

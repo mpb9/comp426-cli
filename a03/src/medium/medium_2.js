@@ -20,12 +20,31 @@ see under the methods section
  * @param {allCarStats.ratioHybrids} ratio of cars that are hybrids
  */
 export const allCarStats = {
-    avgMpg: undefined,
-    allYearStats: undefined,
-    ratioHybrids: undefined,
+    avgMpg: { "city": 
+            (mpg_data
+            .map(p => p.city_mpg)
+            .reduce((x, y) => x +y))
+            / mpg_data.length,
+             "highway":
+            (mpg_data
+            .map(p => p.highway_mpg)
+            .reduce((x, y) => x +y))
+            / mpg_data.length,
+            },
+       
+    allYearStats: getStatistics(mpg_data.reduce((acc, val) => {
+        acc.push(val.year);
+        return acc;
+        }, [])),
+
+    ratioHybrids: mpg_data.filter(p => p.hybrid === true).length / (mpg_data.length),
 };
 
 
+
+// console.log(allCarStats.avgMpg);
+// console.log(allCarStats.allYearStats);
+// console.log(allCarStats.ratioHybrids);
 /**
  * HINT: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce
  *
@@ -84,6 +103,112 @@ export const allCarStats = {
  * }
  */
 export const moreStats = {
-    makerHybrids: undefined,
-    avgMpgByYearAndHybrid: undefined
+    makerHybrids: hybrids(),
+    avgMpgByYearAndHybrid: yearsNHybs()
 };
+
+export function hybrids(){
+    let h = mpg_data
+    .filter(p => p.hybrid === true)
+    
+    .map(p => {
+        let h_obj = {make: p.make, model: p.id};
+        return h_obj;
+    });
+
+    let makes = h
+    .map(p => p.make)
+    .reduce((a, b) => {
+        if (!a.includes(b)) a.push(b);
+        return a
+    }, [])
+    .sort((a, b) => (a > b) ? 1: -1)
+    .map(p => {
+        let ok = h
+        .filter(b => (b.make === p))
+        .map(b => b.model);
+        let maybe = {make: p, hybrids: ok};
+        return maybe;
+    })
+    .sort((a,b) => b.hybrids.length - a.hybrids.length);
+
+   return makes;    
+    
+}
+
+
+
+export function yearsNHybs(){
+    let years = mpg_data
+    .map(p => p.year)
+    .reduce((a, b) => {
+        if (!a.includes(b)) a.push(b);
+        return a;
+    }, [])
+    .sort((a,b) => a-b);
+    
+    
+        
+        let finalProd = years
+        .map(b => {
+            let hybC = mpg_data
+            .filter(q => q.year === b)
+            .filter(q => q.hybrid === true);
+            let numHyb = hybC.length;
+
+
+            let cit_hyb = mpg_data
+            .filter(q => q.year === b)
+            .filter(q => q.hybrid === true)
+            .map(p => p.city_mpg)
+            .reduce((x, y) => x +y);
+            let city = cit_hyb/numHyb;
+
+            let high_hyb = mpg_data
+            .filter(q => q.year === b)
+            .filter(q => q.hybrid === true)
+            .map(p => p.highway_mpg)
+            .reduce((x, y) => x +y);
+            let highway = high_hyb/numHyb;
+            
+
+
+            let nHybC = mpg_data
+            .filter(q => q.year === b)
+            .filter(q => q.hybrid === false);
+            let numNHyb = nHybC.length;
+
+            
+            let cit_nhyb = mpg_data
+            .filter(q => q.year === b)
+            .filter(q => q.hybrid === false)
+            .map(p => p.city_mpg)
+            .reduce((x, y) => x +y);
+            let ncity = cit_nhyb/numNHyb;
+
+            let high_nhyb = mpg_data
+            .filter(q => q.year === b)
+            .filter(q => q.hybrid === false)
+            .map(p => p.highway_mpg)
+            .reduce((x, y) => x +y);
+            let nhighway = high_nhyb/numNHyb;
+
+            // let obj = {[b]: { hybrid: city, notHybrid: ncity} };
+            let hyb = {hybrid: {"city": city, "highway": highway}};
+            let nothyb = {notHybrid: {"city": ncity, "highway": nhighway}};
+
+            let obj = { hybrid: { "city": city, "highway": highway }, notHybrid: { "city": ncity, "highway": nhighway } };
+            return obj;
+
+        }, {});
+
+    let final = {[years[0]]: finalProd[0],
+                [years[1]]: finalProd[1],
+                [years[2]]: finalProd[2],
+                [years[3]]: finalProd[3]};
+        
+        return final;
+}
+console.log(yearsNHybs());
+
+// let obj = { [p]: { hybrid: {city: 0, highway: 0}, notHybrid: {city: 0, highway: 0}} };

@@ -19,6 +19,16 @@ import { heroData } from "./data";
  */
 export function getHeroByIdAsync(heroData, id) {
   // Copy-and-paste code here
+  return new Promise(((resolve, reject) => {
+    let hero = heroData.find(h => h.id == id);
+    setTimeout(() => {
+      if (hero == undefined) {
+        reject();
+      } else {
+        resolve(hero);
+      }
+    }, 1500);
+  }));
 }
 
 
